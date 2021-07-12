@@ -1,30 +1,26 @@
-import express from 'express';
-import { MongoClient } from 'mongodb'
-const morgan = require("morgan");
+import express from "express";
+import companyRoutes from "./routes/company";
+import jobOfferRoutes from "./routes/jobOffer";
+import mongoose from "mongoose";
+import morgan from "morgan";
+import "dotenv/config";
 
 const app = express();
 const PORT = 3000;
-const dbURL = 'mongodb+srv://node-crash-course:4GHYbN9I1jc02YtC@cluster0.zamha.mongodb.net/marsPotTest?retryWrites=true&w=majority'
-const client = new MongoClient(dbURL)
-const dbName = 'marsPotTest'
 
-client.connect().then(result => {
-    console.log(result);
-
-    app.listen(PORT, () => {
-        console.log(`Server started at http://localhost:${PORT}`);
-    });
-})
-
-app.get("/", async (req,res) => {
-    const db = client.db(dbName)
-    const collection = db.collection('documents')
-    const findResult = await collection.find({}).toArray()
-    res.send(findResult)
-    console.log('Found documents =>', findResult)
-})
+mongoose
+  .connect(`${process.env.MONGO_URI}`)
+  .then(() => {
+    app.listen(PORT);
+    console.log(`Server running on http://localhost:${PORT}`);
+  })
+  .catch(err => console.log(err));
 
 // middlewares
-app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
+// routes
+app.use("/company", companyRoutes);
+app.use("/job-offer", jobOfferRoutes);

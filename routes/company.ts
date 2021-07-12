@@ -1,8 +1,13 @@
-/**
- * Routes
- * Create Company
- * List Companies
- * Find Company by ID
- * Update Company
- * Delete Company
- */
+import express from "express";
+
+import { list, create, details, update, remove } from "../controller/company";
+
+const router = express.Router();
+
+router.get("/", list);
+router.post("/", create);
+router.get("/find/:id", details);
+router.put("/:id", update);
+router.delete("/:id", remove);
+
+export default router;
