@@ -9,7 +9,9 @@ const app = express();
 const PORT = 3000;
 
 mongoose
-  .connect(`${process.env.MONGO_URI}`)
+  .connect(`${process.env.MONGO_URI}`, {
+    useFindAndModify: false
+  })
   .then(() => {
     app.listen(PORT);
     console.log(`Server running on http://localhost:${PORT}`);
