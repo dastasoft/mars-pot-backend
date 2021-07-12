@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+
 import CompanyModel from "../model/company";
 
 const list = (req: Request, res: Response) => {

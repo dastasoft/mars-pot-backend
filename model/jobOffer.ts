@@ -1,4 +1,5 @@
 import { Schema, Model, model } from "mongoose";
+
 import { JobOffer as JobOfferProps } from "../types";
 
 const jobOfferSchema = new Schema<

@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+
 import JobOfferModel from "../model/jobOffer";
 
 const list = (req: Request, res: Response) => {

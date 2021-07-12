@@ -1,4 +1,5 @@
 import { Schema, Model, model } from "mongoose";
+
 import { Company as CompanyProps } from "../types";
 
 const companySchema = new Schema<
