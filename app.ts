@@ -1,7 +1,9 @@
+import "dotenv/config";
+
 import createApp from "./lib/createApp";
 import connectDB from "./lib/db";
 
-const PORT = 3000;
+const PORT = process.env.PORT;
 
 connectDB()
   .then(() => {

@@ -1,6 +1,5 @@
 import express from "express";
 import morgan from "morgan";
-import "dotenv/config";
 
 import companyRoutes from "../routes/company";
 import jobOfferRoutes from "../routes/jobOffer";
