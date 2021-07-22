@@ -1,89 +1,103 @@
 import { Request, Response } from "express";
+import path from "path";
+import fs from "fs";
 
-import CompanyModel from "../model/company";
+import { Company } from "../types";
+
+const DB_PATH = path.resolve("database/companies.json");
 
 const list = (req: Request, res: Response) => {
-  CompanyModel.find()
-    .sort({ createdAt: -1 })
-    .then(result => {
-      res.send(result);
-    })
-    .catch(err => {
-      res.status(500).send({ error: err, message: "No companies were found." });
-    });
+  fs.readFile(DB_PATH, (error, data) => {
+    if (error) {
+      console.error(error);
+      res.status(500).end();
+    } else {
+      res.status(200).send(JSON.parse(data.toString()));
+    }
+  });
 };
 
 const create = (req: Request, res: Response) => {
-  const company = new CompanyModel(req.body);
+  const company: Company = req.body;
 
-  company
-    .save()
-    .then(result => res.status(200).send(result))
-    .catch(err =>
-      res
-        .status(500)
-        .send({ error: err, message: "Error creating the company" })
-    );
+  const companies: Company[] = JSON.parse(fs.readFileSync(DB_PATH).toString());
+
+  const newCompanies = [
+    ...companies,
+    { ...company, id: companies.length.toString() }
+  ];
+
+  fs.writeFile(DB_PATH, JSON.stringify(newCompanies, null, 2), error => {
+    if (error) {
+      console.error(error);
+      res.status(500).end();
+    } else {
+      res.status(200).send({ message: "New company added." });
+    }
+  });
 };
 
 const details = (req: Request, res: Response) => {
   const { id } = req.params;
+  const companies: Company[] = JSON.parse(fs.readFileSync(DB_PATH).toString());
 
-  CompanyModel.findById(id)
-    .then(result => {
-      if (result) {
-        res.status(200).send(result);
-      } else {
-        res
-          .status(404)
-          .send({ message: `No companies were found with id ${id}` });
-      }
-    })
-    .catch(err =>
-      res
-        .status(500)
-        .send({ error: err, message: "Error retrieving the company" })
-    );
+  const company = companies.find(company => company.id === id);
+
+  if (company) {
+    res.status(200).send(company);
+  } else {
+    res.status(404).send({ message: `Company with id ${id} not found.` });
+  }
 };
 
 const update = (req: Request, res: Response) => {
   const { id } = req.params;
+  const companyData: Company = req.body;
 
-  CompanyModel.findByIdAndUpdate(id, req.body, { useFindAndModify: true })
-    .then(result => {
-      if (!result) {
-        res.status(404).send({
-          message: `Cannot update Company with id ${id}. Company was not found.`
-        });
+  const companies: Company[] = JSON.parse(fs.readFileSync(DB_PATH).toString());
+
+  const company = companies.find(company => company.id === id);
+  const updatedCompany = { ...company, ...companyData };
+
+  if (company) {
+    const newCompanies: Company[] = [
+      ...companies.filter(company => company.id !== id),
+      updatedCompany
+    ];
+
+    fs.writeFile(DB_PATH, JSON.stringify(newCompanies, null, 2), error => {
+      if (error) {
+        console.error(error);
+        res.status(500).end();
       } else {
-        res.status(200).send(result);
+        res.status(200).send({ message: `Company with id ${id} updated.` });
       }
-    })
-    .catch(err => {
-      res
-        .status(500)
-        .send({ error: err, message: `Error updating Company with id ${id}.` });
     });
+  } else {
+    res.status(404).send({ message: `Company with id ${id} not found.` });
+  }
 };
 
 const remove = (req: Request, res: Response) => {
   const { id } = req.params;
 
-  CompanyModel.findByIdAndRemove(id)
-    .then(result => {
-      if (!result) {
-        res.status(404).send({
-          message: `Cannot delete Company with id ${id}. Company was not found.`
-        });
+  const companies: Company[] = JSON.parse(fs.readFileSync(DB_PATH).toString());
+
+  const company = companies.find(company => company.id === id);
+  const newCompanies = companies.filter(company => company.id !== id);
+
+  if (company) {
+    fs.writeFile(DB_PATH, JSON.stringify(newCompanies, null, 2), error => {
+      if (error) {
+        console.error(error);
+        res.status(500).end();
       } else {
-        res.status(200).send(result);
+        res.status(200).send({ message: `Company with id ${id} removed.` });
       }
-    })
-    .catch(err => {
-      res
-        .status(500)
-        .send({ error: err, message: `Error deleting Company with id ${id}.` });
     });
+  } else {
+    res.status(404).send({ message: `Company with id ${id} not found.` });
+  }
 };
 
 export { list, create, details, update, remove };

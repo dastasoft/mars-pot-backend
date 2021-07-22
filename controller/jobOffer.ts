@@ -1,106 +1,110 @@
 import { Request, Response } from "express";
+import path from "path";
+import fs from "fs";
 
-import JobOfferModel from "../model/jobOffer";
+import { JobOffer } from "../types";
+
+const DB_PATH = path.resolve("database/joboffers.json");
 
 const list = (req: Request, res: Response) => {
-  JobOfferModel.find()
-    .sort({ createdAt: -1 })
-    .then(result => {
-      res.send(result);
-    })
-    .catch(err => {
-      res
-        .status(500)
-        .send({ error: err, message: "No job offers were found." });
-    });
+  fs.readFile(DB_PATH, (error, data) => {
+    if (error) {
+      console.error(error);
+      res.status(500).end();
+    } else {
+      res.status(200).send(JSON.parse(data.toString()));
+    }
+  });
 };
 
 const create = (req: Request, res: Response) => {
-  const jobOffer = new JobOfferModel(req.body);
+  const jobOffer: JobOffer = req.body;
 
-  jobOffer
-    .save()
-    .then(result => res.status(200).send(result))
-    .catch(err =>
-      res
-        .status(500)
-        .send({ error: err, message: "Error creating the job offer" })
-    );
+  const jobOffers: JobOffer[] = JSON.parse(fs.readFileSync(DB_PATH).toString());
+
+  const newJobOffers = [...jobOffers, jobOffer];
+
+  fs.writeFile(DB_PATH, JSON.stringify(newJobOffers, null, 2), error => {
+    if (error) {
+      console.error(error);
+      res.status(500).end();
+    } else {
+      res.status(200).send({ message: "New job offer added." });
+    }
+  });
 };
 
 const details = (req: Request, res: Response) => {
   const { id } = req.params;
+  const jobOffers: JobOffer[] = JSON.parse(fs.readFileSync(DB_PATH).toString());
 
-  JobOfferModel.findById(id)
-    .then(result => {
-      if (result) {
-        res.status(200).send(result);
-      } else {
-        res
-          .status(404)
-          .send({ message: `No job offers were found with id ${id}` });
-      }
-    })
-    .catch(err =>
-      res
-        .status(500)
-        .send({ error: err, message: "Error retrieving the job offer" })
-    );
+  const jobOffer = jobOffers.find(jobOffer => jobOffer.id === id);
+
+  if (jobOffer) {
+    res.status(200).send(jobOffer);
+  } else {
+    res.status(404).send({ message: `Job offer with id ${id} not found.` });
+  }
 };
 
 const update = (req: Request, res: Response) => {
   const { id } = req.params;
+  const jobOfferData: JobOffer = req.body;
 
-  JobOfferModel.findByIdAndUpdate(id, req.body, { useFindAndModify: true })
-    .then(result => {
-      if (!result) {
-        res.status(404).send({
-          message: `Cannot update Job Offer with id ${id}. Job Offer was not found.`
-        });
+  const jobOffers: JobOffer[] = JSON.parse(fs.readFileSync(DB_PATH).toString());
+
+  const jobOffer = jobOffers.find(jobOffer => jobOffer.id === id);
+  const updatedJobOffer = { ...jobOffer, ...jobOfferData };
+
+  if (jobOffer) {
+    const newJobOffers: JobOffer[] = [
+      ...jobOffers.filter(jobOffer => jobOffer.id !== id),
+      updatedJobOffer
+    ];
+
+    fs.writeFile(DB_PATH, JSON.stringify(newJobOffers, null, 2), error => {
+      if (error) {
+        console.error(error);
+        res.status(500).end();
       } else {
-        res.status(200).send(result);
+        res.status(200).send({ message: `Job offer with id ${id} updated.` });
       }
-    })
-    .catch(err => {
-      res.status(500).send({
-        error: err,
-        message: `Error updating Job Offer with id ${id}.`
-      });
     });
+  } else {
+    res.status(404).send({ message: `Job offer with id ${id} not found.` });
+  }
 };
 
 const remove = (req: Request, res: Response) => {
   const { id } = req.params;
 
-  JobOfferModel.findByIdAndRemove(id)
-    .then(result => {
-      if (!result) {
-        res.status(404).send({
-          message: `Cannot delete Job Offer with id ${id}. Job Offer was not found.`
-        });
+  const jobOffers: JobOffer[] = JSON.parse(fs.readFileSync(DB_PATH).toString());
+
+  const jobOffer = jobOffers.find(jobOffer => jobOffer.id === id);
+  const newJobOffers = jobOffers.filter(jobOffer => jobOffer.id !== id);
+
+  if (jobOffer) {
+    fs.writeFile(DB_PATH, JSON.stringify(newJobOffers), error => {
+      if (error) {
+        console.error(error);
+        res.status(500).end();
       } else {
-        res.status(200).send(result);
+        res.status(200).send({ message: `Job offer with id ${id} removed.` });
       }
-    })
-    .catch(err => {
-      res.status(500).send({
-        error: err,
-        message: `Error deleting Job Offer with id ${id}.`
-      });
     });
+  } else {
+    res.status(404).send({ message: `Job offer with id ${id} not found.` });
+  }
 };
 
 const findPublished = (req: Request, res: Response) => {
-  JobOfferModel.find({ published: true })
-    .sort({ createdAt: -1 })
-    .then(result => {
-      res.send(result);
-    })
-    .catch(err => {
-      res
-        .status(500)
-        .send({ error: err, message: "No job offers were found." });
-    });
+  const jobOffers: JobOffer[] = JSON.parse(fs.readFileSync(DB_PATH).toString());
+
+  const published: JobOffer[] = jobOffers.filter(
+    jobOffer => jobOffer.published
+  );
+
+  res.status(200).send(JSON.parse(published.toString()));
 };
 
 export { list, create, details, update, remove, findPublished };

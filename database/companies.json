@@ -1,0 +1,35 @@
+[
+  {
+    "about": "test",
+    "industries": [
+      "test",
+      "test2"
+    ],
+    "name": "test",
+    "numberEmployees": 1,
+    "yearFounded": 1990,
+    "id": "0"
+  },
+  {
+    "about": "test",
+    "industries": [
+      "test",
+      "test2"
+    ],
+    "name": "test",
+    "numberEmployees": 1,
+    "yearFounded": 1990,
+    "id": "2"
+  },
+  {
+    "about": "test",
+    "industries": [
+      "test",
+      "test2"
+    ],
+    "name": "test",
+    "numberEmployees": 1,
+    "yearFounded": 1990,
+    "id": "3"
+  }
+]

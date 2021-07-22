@@ -1,4 +1,5 @@
 type Company = {
+  id: string;
   about: string;
   industries: string[];
   name: string;
@@ -7,6 +8,7 @@ type Company = {
 };
 
 type JobOffer = {
+  id: string;
   availablePositions?: number;
   companyId: string;
   description: string;
