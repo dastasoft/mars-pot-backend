@@ -57,7 +57,7 @@ const update = (req: Request, res: Response) => {
   const companies: Company[] = JSON.parse(fs.readFileSync(DB_PATH).toString());
 
   const company = companies.find(company => company.id === id);
-  const updatedCompany = { ...company, ...companyData };
+  const updatedCompany: Company = { ...company, ...companyData };
 
   if (company) {
     const newCompanies: Company[] = [
@@ -82,7 +82,6 @@ const remove = (req: Request, res: Response) => {
   const { id } = req.params;
 
   const companies: Company[] = JSON.parse(fs.readFileSync(DB_PATH).toString());
-
   const company = companies.find(company => company.id === id);
   const newCompanies = companies.filter(company => company.id !== id);
 

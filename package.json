@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --ignore ./database/ app.ts"
+    "start": "tsc && node dist/app.js",
+    "start:dev": "nodemon --ignore './database/' app.ts"
   },
   "keywords": [],
   "author": "dastasoft <dastasoft@protonmail.com> (https://dastasoft.com)",

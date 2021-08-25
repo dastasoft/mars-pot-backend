@@ -54,7 +54,7 @@ const update = (req: Request, res: Response) => {
   const jobOffers: JobOffer[] = JSON.parse(fs.readFileSync(DB_PATH).toString());
 
   const jobOffer = jobOffers.find(jobOffer => jobOffer.id === id);
-  const updatedJobOffer = { ...jobOffer, ...jobOfferData };
+  const updatedJobOffer: JobOffer = { ...jobOffer, ...jobOfferData };
 
   if (jobOffer) {
     const newJobOffers: JobOffer[] = [
@@ -84,7 +84,7 @@ const remove = (req: Request, res: Response) => {
   const newJobOffers = jobOffers.filter(jobOffer => jobOffer.id !== id);
 
   if (jobOffer) {
-    fs.writeFile(DB_PATH, JSON.stringify(newJobOffers), error => {
+    fs.writeFile(DB_PATH, JSON.stringify(newJobOffers, null, 2), error => {
       if (error) {
         console.error(error);
         res.status(500).end();
@@ -104,7 +104,7 @@ const findPublished = (req: Request, res: Response) => {
     jobOffer => jobOffer.published
   );
 
-  res.status(200).send(JSON.parse(published.toString()));
+  res.status(200).json(published);
 };
 
 export { list, create, details, update, remove, findPublished };
