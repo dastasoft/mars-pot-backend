@@ -5,6 +5,7 @@
     "target": "es6",
     "rootDir": "./",
     "outDir": "./dist",
-    "strict": true
+    "strict": true,
+    "baseUrl": "./"
   }
 }

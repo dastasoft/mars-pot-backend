@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import path from "path";
 import fs from "fs";
 
-import { Company } from "../types";
+import { Company } from "types";
 
 const DB_PATH = path.resolve("database/companies.json");
 

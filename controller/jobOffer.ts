@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import path from "path";
 import fs from "fs";
 
-import { JobOffer } from "../types";
+import { JobOffer } from "types";
 
 const DB_PATH = path.resolve("database/joboffers.json");
 

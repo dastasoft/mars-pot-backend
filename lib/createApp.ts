@@ -1,8 +1,9 @@
 import express from "express";
 import morgan from "morgan";
 
-import companyRoutes from "../routes/company";
-import jobOfferRoutes from "../routes/jobOffer";
+import companyRoutes from "routes/company";
+import jobOfferRoutes from "routes/jobOffer";
+import { ROUTES } from "./constants";
 
 export default function createApp() {
   const app = express();
@@ -13,8 +14,8 @@ export default function createApp() {
   app.use(express.urlencoded({ extended: true }));
 
   // routes
-  app.use("/company", companyRoutes);
-  app.use("/job-offer", jobOfferRoutes);
+  app.use(ROUTES.COMPANY, companyRoutes);
+  app.use(ROUTES.JOB_OFFER, jobOfferRoutes);
 
   return app;
 }
