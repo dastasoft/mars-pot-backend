@@ -1,9 +1,11 @@
+import "dotenv/config";
+
 import createApp from "./lib/createApp";
 import connectDB from "./lib/db";
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3001;
 
-connectDB()
+connectDB(`${process.env.MONGO_URI}`)
   .then(() => {
     const app = createApp();
     app.listen(PORT);
