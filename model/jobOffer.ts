@@ -8,18 +8,18 @@ const jobOfferSchema = new Schema<
   JobOfferProps
 >(
   {
-    availablePositions: Number,
-    companyId: { type: String, required: true },
+    availablePositions: { type: Number },
+    companyId: { type: Schema.Types.ObjectId, ref: "Company", required: true },
     description: { type: String, required: true },
     function: { type: String, required: true },
     industry: { type: String, required: true },
     location: { type: String, required: true },
-    numberApplicants: Number,
+    numberApplicants: { type: Number },
     postDate: { type: Date, required: true },
     published: { type: Boolean, required: true },
     requirements: { type: [String], required: true },
-    salary: Number,
-    workType: { type: String, required: true }
+    salary: { type: Number },
+    workType: { type: String, required: true },
   },
   { timestamps: true }
 );

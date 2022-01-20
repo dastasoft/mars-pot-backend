@@ -1,3 +1,5 @@
+import { ObjectId } from "mongoose";
+
 type Company = {
   about: string;
   industries: string[];
@@ -8,7 +10,7 @@ type Company = {
 
 type JobOffer = {
   availablePositions?: number;
-  companyId: string;
+  companyId: ObjectId;
   description: string;
   function: string;
   industry: string;
