@@ -1,13 +1,13 @@
-import express from "express";
+import express from 'express'
 
-import { list, create, details, update, remove } from "../controller/company";
+import { list, create, details, update, remove } from '../controller/company'
 
-const router = express.Router();
+const router = express.Router()
 
-router.get("/", list);
-router.post("/", create);
-router.get("/find/:id", details);
-router.put("/:id", update);
-router.delete("/:id", remove);
+router.get('/', list)
+router.post('/', create)
+router.get('/find/:id', details)
+router.put('/:id', update)
+router.delete('/:id', remove)
 
-export default router;
+export default router

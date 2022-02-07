@@ -1,4 +1,4 @@
-import express from "express";
+import express from 'express'
 
 import {
   list,
@@ -6,16 +6,16 @@ import {
   details,
   update,
   remove,
-  findPublished
-} from "../controller/jobOffer";
+  findPublished,
+} from '../controller/jobOffer'
 
-const router = express.Router();
+const router = express.Router()
 
-router.get("/", list);
-router.post("/", create);
-router.get("/find/:id", details);
-router.put("/:id", update);
-router.delete("/:id", remove);
-router.get("/published", findPublished);
+router.get('/', list)
+router.post('/', create)
+router.get('/find/:id', details)
+router.put('/:id', update)
+router.delete('/:id', remove)
+router.get('/published', findPublished)
 
-export default router;
+export default router
