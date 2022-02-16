@@ -1,7 +1,17 @@
 db = new Mongo().getDB('data')
 
+db.createCollection('users', { capped: false })
 db.createCollection('companies', { capped: false })
 db.createCollection('joboffers', { capped: false })
+
+db.users.insert([
+  {
+    email: 'dastasoft@protonmail.com',
+    firstName: 'Daniel',
+    password: 'password',
+    username: 'dastasoft',
+  },
+])
 
 db.companies.insert([
   {

@@ -2,11 +2,7 @@ import { Schema, Model, model } from 'mongoose'
 
 import { JobOffer as JobOfferProps } from '../types'
 
-const jobOfferSchema = new Schema<
-  JobOfferProps,
-  Model<JobOfferProps>,
-  JobOfferProps
->(
+const jobOfferSchema = new Schema<JobOfferProps, Model<JobOfferProps>>(
   {
     availablePositions: { type: Number, min: 1 },
     companyId: { type: Schema.Types.ObjectId, ref: 'Company', required: true },
