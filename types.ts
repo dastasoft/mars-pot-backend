@@ -35,6 +35,7 @@ type User = {
   firstName: string
   lastName?: string
   password: string
+  type: 'applicant' | 'recruiter'
   updatedAt: Date
   username: string
 }

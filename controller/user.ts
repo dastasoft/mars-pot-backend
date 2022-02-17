@@ -13,7 +13,7 @@ const list = (req: Request, res: Response) => {
     })
 }
 
-const create = (req: Request, res: Response) => {
+const signup = (req: Request, res: Response) => {
   if (!req.body) {
     res.status(400).send({ message: 'No user data has been provided' })
   }
@@ -25,16 +25,28 @@ const create = (req: Request, res: Response) => {
     )
 }
 
-const details = (req: Request, res: Response) => {
-  const { id } = req.params
+const login = (req: Request, res: Response) => {
+  if (!req.body) {
+    res.status(400).send({ message: 'No user data has been provided' })
+  }
 
-  UserModel.findById(id)
-    .sort({ createdAt: -1 })
-    .then(result => {
-      if (result) {
-        res.status(200).send(result)
+  const { email, password } = req.body
+
+  UserModel.findOne({ email })
+    .then(userDocument => {
+      if (userDocument) {
+        userDocument
+          .handleLogin(password)
+          .then(() => res.status(200).send(userDocument))
+          .catch(() =>
+            res.status(401).send({
+              message: 'Password is not correct',
+            })
+          )
       } else {
-        res.status(404).send({ message: `No users were found with id ${id}` })
+        res
+          .status(404)
+          .send({ message: `No users were found with email ${email}` })
       }
     })
     .catch(err =>
@@ -84,4 +96,4 @@ const remove = (req: Request, res: Response) => {
     })
 }
 
-export { list, create, details, update, remove }
+export { list, signup, login, update, remove }

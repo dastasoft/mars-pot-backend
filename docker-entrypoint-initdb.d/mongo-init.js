@@ -8,7 +8,7 @@ db.users.insert([
   {
     email: 'dastasoft@protonmail.com',
     firstName: 'Daniel',
-    password: 'password',
+    password: '$2b$10$764xE8aohGTcaB9HFQF3meIEZeYWMI3GoFaddQqHu4D7Ym40nYI9u',
     username: 'dastasoft',
   },
 ])
