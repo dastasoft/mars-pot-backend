@@ -11,7 +11,7 @@ type Company = {
   yearFounded: number
 }
 
-type JobOffer = {
+type Job = {
   availablePositions?: number
   companyId: ObjectId
   createdAt: Date
@@ -40,4 +40,4 @@ type User = {
   username: string
 }
 
-export { Company, JobOffer, User }
+export { Company, Job, User }

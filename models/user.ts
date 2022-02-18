@@ -5,7 +5,7 @@ import { User as UserProps } from '../types'
 
 interface UserDocument extends Document, UserProps {
   fullName: string
-  handleLogin(password: string): Promise<Error | void>
+  isCorrectLogin(password: string): Promise<Error | boolean>
 }
 
 interface UserModel extends Model<UserDocument> {}
@@ -41,6 +41,8 @@ const UserSchema = new Schema<UserDocument, UserModel>(
 
 // Document middlewares
 UserSchema.pre<UserDocument>('save', async function (next) {
+  this.updatedAt = new Date()
+
   if (this.isModified('password')) {
     const rounds = 10
     const hash = await bcrypt.hash(this.password, rounds)
@@ -50,12 +52,12 @@ UserSchema.pre<UserDocument>('save', async function (next) {
 })
 
 // Methods
-UserSchema.methods.handleLogin = function (password: string) {
-  return new Promise<Error | void>((resolve, reject) => {
+UserSchema.methods.isCorrectLogin = function (password: string) {
+  return new Promise<Error | boolean>((resolve, reject) => {
     bcrypt.compare(password, this.password, function (err, result) {
       if (err) return reject(err)
-      if (result) return resolve()
-      return reject()
+      if (result) return resolve(true)
+      return resolve(false)
     })
   })
 }

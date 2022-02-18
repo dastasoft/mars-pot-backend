@@ -2,7 +2,7 @@ import { Schema, Model, model } from 'mongoose'
 
 import { Company as CompanyProps } from '../types'
 
-const companySchema = new Schema<CompanyProps, Model<CompanyProps>>(
+const CompanySchema = new Schema<CompanyProps, Model<CompanyProps>>(
   {
     about: { type: String, required: true },
     industries: { type: [String], required: true },
@@ -14,6 +14,6 @@ const companySchema = new Schema<CompanyProps, Model<CompanyProps>>(
   { timestamps: true }
 )
 
-const Company = model<CompanyProps>('Company', companySchema)
+const CompanyModel = model<CompanyProps>('Company', CompanySchema)
 
-export default Company
+export default CompanyModel
