@@ -8,7 +8,9 @@ interface UserDocument extends Document, UserProps {
   isCorrectLogin(password: string): Promise<Error | boolean>
 }
 
-interface UserModel extends Model<UserDocument> {}
+interface UserModel extends Model<UserDocument> {
+  getUser(username: string): Promise<Error | UserDocument>
+}
 
 const UserSchema = new Schema<UserDocument, UserModel>(
   {
@@ -58,6 +60,16 @@ UserSchema.methods.isCorrectLogin = function (password: string) {
       if (err) return reject(err)
       if (result) return resolve(true)
       return resolve(false)
+    })
+  })
+}
+
+// Statics
+UserSchema.statics.getUser = function (username: string) {
+  return new Promise((resolve, reject) => {
+    this.findOne({ username }, (err: Error, user: UserDocument) => {
+      if (err) reject(err)
+      resolve(user)
     })
   })
 }
