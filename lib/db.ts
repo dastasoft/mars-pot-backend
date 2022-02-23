@@ -1,11 +1,13 @@
 import mongoose from 'mongoose'
 
+mongoose.connection.on('open', () => {
+  console.log(`💿 MongoDB Connected`)
+})
+
 export default async function connectDB() {
   try {
-    const Mongoose = await mongoose.connect(`${process.env.MONGO_URI}`)
-    console.log(`💿 MongoDB Live: ${Mongoose.connection.host}`)
+    await mongoose.connect(`${process.env.MONGO_URI}`)
   } catch (error) {
     console.error(error)
-    process.exit(1)
   }
 }
