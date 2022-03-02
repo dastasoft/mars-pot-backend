@@ -8,7 +8,7 @@ const CompanySchema = new Schema<CompanyProps, Model<CompanyProps>>(
     industries: { type: [String], required: true },
     logo: String,
     name: { type: String, required: true },
-    numberEmployees: { type: String, required: true },
+    numberEmployees: { type: Number, required: true },
     yearFounded: { type: Number, required: true },
   },
   { timestamps: true }

@@ -6,7 +6,7 @@ type Company = {
   industries: string[]
   logo?: string
   name: string
-  numberEmployees: string
+  numberEmployees: number
   updatedAt: Date
   yearFounded: number
 }

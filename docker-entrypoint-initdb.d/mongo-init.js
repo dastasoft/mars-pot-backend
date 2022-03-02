@@ -2,7 +2,7 @@ db = new Mongo().getDB('data')
 
 db.createCollection('users', { capped: false })
 db.createCollection('companies', { capped: false })
-db.createCollection('joboffers', { capped: false })
+db.createCollection('jobs', { capped: false })
 
 db.users.insert([
   {
@@ -32,7 +32,7 @@ db.companies.insert([
 
 const { _id } = db.companies.find().pretty()[0]
 
-db.joboffers.insert([
+db.jobs.insert([
   {
     availablePositions: 10,
     companyId: _id,
