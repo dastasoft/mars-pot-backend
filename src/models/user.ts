@@ -76,7 +76,7 @@ UserSchema.statics.getUser = function (username: string) {
 
 // Virtuals
 UserSchema.virtual('fullName').get(function (this: UserDocument) {
-  return this.firstName + this.lastName
+  return `${this.firstName} ${this.lastName}`
 })
 
 const User = model<UserDocument, UserModel>('User', UserSchema)

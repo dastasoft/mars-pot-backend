@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import JobModel from '../models/job'
 import { Company } from '../types'
 
-const list = async (req: Request, res: Response) => {
+const list = async (_req: Request, res: Response) => {
   try {
     const job = await JobModel.find()
       .populate<{ companyId: Company }>('companyId')

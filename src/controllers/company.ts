@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 
 import CompanyModel from '../models/company'
 
-const list = async (req: Request, res: Response) => {
+const list = async (_req: Request, res: Response) => {
   try {
     const company = await CompanyModel.find().sort({ createdAt: -1 })
 
