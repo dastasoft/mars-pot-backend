@@ -34,6 +34,10 @@ const login = async (req: Request, res: Response) => {
         res.status(401).json({
           message: 'Email password combination is not correct',
         })
+    } else {
+      res.status(401).json({
+        message: 'Email password combination is not correct',
+      })
     }
   } catch (error) {
     res.status(500).json({ error, message: 'Error retrieving the user' })
