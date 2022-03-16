@@ -30,11 +30,11 @@ const login = async (req: Request, res: Response) => {
       isCorrectLogin = await user.isCorrectLogin(password)
       if (isCorrectLogin)
         res.status(200).json({ message: `Welcome ${user.fullName}` })
+      else
+        res.status(401).json({
+          message: 'Email password combination is not correct',
+        })
     }
-
-    res.status(401).json({
-      message: 'Email password combination is not correct',
-    })
   } catch (error) {
     res.status(500).json({ error, message: 'Error retrieving the user' })
   }
